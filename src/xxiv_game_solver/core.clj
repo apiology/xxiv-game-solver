@@ -1,31 +1,51 @@
 (ns xxiv-game-solver.core
-  (:require [clojure.test.check.generators :as gen]
-            [clojure.math.combinatorics :as combo]
+  (:require [clojure.math.combinatorics :as combo]
             [clojure.walk :as w]))
 
-(def nums
-  (gen/choose 1 9))
+(comment 
+  
+  ;; an example of the 24 game
+  (let [n1 1
+        n2 2
+        n3 3
+        n4 4
+        
+        ;; ` is the syntax quote
+        ;; ~ is unqote
+        ;; For what those do see: http://yobriefca.se/blog/2014/05/19/the-weird-and-wonderful-characters-of-clojure/ 
+        ;; "operation" will now contain a list containing some clojure functions and the the values 
+        ;; in n1, n2, n3, and n4. This is a data structure that can be evaluated as clojure code.
+        operation `(* (+ ~n1 ~n2 ~n3) ~n4)]
+    
+    ;; We can evaluate operation as clojure code.
+    (eval operation))
+  
+  )
 
-(def num-lists
-  (gen/vector nums 4))
+
+(defn solve-xxiv
+  "Takes a list of 4 numbers. It should see if the 4 numbers can be combined mathematically using 
+  +, *, -, and / to somehow equal the sum 24. It should return a sequence of Clojure code combining
+  n1, n2, n3, and n4 with the 4 operations that evaluate to 24."
+  [n1 n2 n3 n4]
+  
+  ;; TODO implement this.
+  
+  )
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; my implementation
 
-(combo/permutations [7 4 3 1])
-
 (def possible-operations
-  [+ * / -]
-  ;; easier printing for debugging
-  ; [:+ :* :/ :-]
-  )
+  [+ * / -])
 
 (defn pair-combinations
   [as b]
   (mapcat (fn [a]
-         (map (fn [op] (list op a b)) possible-operations))
-       as))
+            (map #(list % a b) possible-operations))
+          as))
 
 (defn nums->operations
   [nums]
@@ -37,26 +57,17 @@
           (combo/permutations nums)))
 
 (defn solve-xxiv
-  "TODO"
-  [nums]
+  "Takes a list of 4 numbers. It should see if the 4 numbers can be combined mathematically using 
+  +, *, -, and / to somehow equal the sum 24. It should return a sequence of Clojure code combining
+  n1, n2, n3, and n4 with the 4 operations that evaluate to 24."
+  [& nums]
   (filter (fn [op]
             (= 24 (eval op)))
           (nums->operations nums)))
 
 (defn pretty-print-equation
+  "A helper that will replace all of the real math functions with symbols for pretty printing."
   [op]
   (w/prewalk-replace {* :* + :+ - :- / :/} op))
-(comment 
-(map pretty-print-equation (solve-xxiv [1 3 1 4]))
-)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defn evaluate-solver
-  []
-  (let [num-lists (gen/sample-seq 100)]
-    ;; should iterate over each num list evaluating the results 
-    ;; make sure it is 24
-    ;; Count the number of requests that it can find 24
-    
-    ))
