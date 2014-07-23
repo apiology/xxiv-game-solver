@@ -29,5 +29,3 @@
   n2, n3, and n4 with the 4 operations that evaluate to 24."  
   [n1 n2 n3 n4]
   (filter evals-to-24? (possible-answers n1 n2 n3 n4)))
-
-
