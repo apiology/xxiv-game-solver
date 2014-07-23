@@ -9,7 +9,7 @@
   (combo/selections [+ - / *] 3))
 
 (defn create-expression [[n1 n2 n3 n4] [o1 o2 o3]]
-    (list o1 n1 (list o2 n2 (list o3 n3 n4))))
+  (list o1 n1 (list o2 n2 (list o3 n3 n4))))
 
 (defn possible-answers [n1 n2 n3 n4]
   (for [numbers (all-number-permutations n1 n2 n3 n4)
